@@ -7,7 +7,7 @@ export class Hall {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, length: 255 })
   name: string;
 
   @OneToMany(() => Seat, (seat) => seat.hall)

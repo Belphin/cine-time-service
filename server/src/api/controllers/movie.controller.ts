@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { MovieService } from '../services/movie.service';
-import { Movie } from '../entities/movie.entity';
+import { Controller, Get, Param } from '@nestjs/common';
+import { Session } from 'src/api/entities/session.entity';
+import { MovieService } from 'src/api/services/movie.service';
 
 @Controller('movie')
 export class MovieController {
@@ -11,8 +11,8 @@ export class MovieController {
     return this.movieService.getMovies();
   }
 
-  @Post()
-  async createMovie(@Body() movie: Movie) {
-    return this.movieService.createMovie(movie);
+  @Get(':id/sessions')
+  async GetMovieSessions(@Param('id') movieId: string): Promise<Session[]> {
+    return this.movieService.getMovieSessions(parseInt(movieId, 10));
   }
 }

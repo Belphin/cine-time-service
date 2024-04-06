@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { configuration } from './config/configuration';
-import { ApiModule } from './api/api.module';
-import { typeOrmConfig } from './config/typeorm.config';
+
+import { AppController } from 'src/app.controller';
+import { AppService } from 'src/app.service';
+import { configuration } from 'src/config/configuration';
+import { ApiModule } from 'src/api/api.module';
+import { typeOrmConfig } from 'src/config/typeorm.config';
 
 @Module({
   imports: [
