@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Movie } from './movie.entity';
 import { Hall } from './hall.entity';
+import { ReservedSeat } from './reservedSeat.entity';
 
 @Entity()
 export class Session {
@@ -23,6 +24,9 @@ export class Session {
   @ManyToOne(() => Movie, (movie) => movie.sessions)
   @JoinColumn({ name: 'movie_id' })
   movie: Movie;
+
+  @OneToMany(() => ReservedSeat, (reservedSeat) => reservedSeat.session)
+  reservedSeats: ReservedSeat[];
 
   constructor(hall: Hall, movie: Movie, startTime: string, endTime: string) {
     this.hall = hall;

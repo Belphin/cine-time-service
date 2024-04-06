@@ -44,7 +44,7 @@ INSERT INTO seat (row, number, hall_id) VALUES
 -- Session
 CREATE TABLE IF NOT EXISTS session (
     id SERIAL PRIMARY KEY,
-		session_date DATE,
+    session_date DATE,
     start_time TIME,
     end_time TIME,
     hall_id INT REFERENCES hall(id),
