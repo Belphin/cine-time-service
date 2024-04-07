@@ -6,6 +6,7 @@ import { SeatReservationDto } from '../dto/seat-reservation.dto';
 import { ReservedSeat } from '../entities/reservedSeat.entity';
 import { Session } from '../entities/session.entity';
 import { Seat } from '../entities/seat.entity';
+import { buildCalendarEventDetails, createGoogleCalendarEvent } from '../utils/google.utils';
 
 @Injectable()
 export class MovieService {
@@ -49,7 +50,7 @@ export class MovieService {
     const { sessionId, seatId, visitorEmail } = reservationDto;
 
     // Check if the session exists
-    const session = await this.sessionRepository.findOne({ where: { id: sessionId }, relations: ['hall'] });
+    const session = await this.sessionRepository.findOne({ where: { id: sessionId }, relations: ['hall', 'movie'] });
     if (!session) {
       throw new HttpException('Session not found', HttpStatus.BAD_REQUEST);
     }
@@ -75,7 +76,7 @@ export class MovieService {
     });
 
     if (currentReservedSeat) {
-      throw new HttpException('Seat is already reserved by someone', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Seat is already reserved', HttpStatus.BAD_REQUEST);
     }
 
     // Create a new reservedSeat
@@ -85,6 +86,13 @@ export class MovieService {
       visitor_email: visitorEmail
     });
 
-    return await this.reservedSeatRepository.save(reservedSeat);
+    const savedReservedSeat = await this.reservedSeatRepository.save(reservedSeat);
+
+    // Create Google Calendar event
+    const eventDetails = buildCalendarEventDetails(savedReservedSeat);
+
+    await createGoogleCalendarEvent(eventDetails);
+
+    return savedReservedSeat;
   }
 }
